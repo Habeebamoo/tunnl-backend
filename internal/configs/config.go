@@ -8,13 +8,19 @@ import (
 )
 
 type Config struct {
-	Port              string
-	Env               string
-	RedisUrl          string
-	PostgresUrl       string
-	TelegramBotToken  string
-	TermiiAPIKey      string
-	FCMServerKey      string
+	Port                string
+	Env                 string
+	RedisUrl            string
+	PostgresUrl         string
+	TelegramBotToken    string
+	TermiiAPIKey        string
+	FCMServerKey        string
+	GoogleClientID      string
+	GoogleClientSecret  string
+	GitHubClientID      string
+	GitHubClientSecret  string
+	FrontendUrl         string
+	JwtSecret           string
 }
 
 func Load() *Config {
@@ -40,12 +46,18 @@ func Load() *Config {
 	}
 
 	return &Config{
-		Port:     port,
-		Env:      env,
-		RedisUrl: redisURL,
-		PostgresUrl:      os.Getenv("POSTGRES_URL"),
-		TelegramBotToken: os.Getenv("TELEGRAM_BOT_TOKEN"),
-		TermiiAPIKey:     os.Getenv("TERMII_API_KEY"),
-		FCMServerKey:     os.Getenv("FCM_SERVER_KEY"),
+		Port:                port,
+		Env:                 env,
+		RedisUrl: 					 redisURL,
+		PostgresUrl:         os.Getenv("POSTGRES_URL"),
+		TelegramBotToken:    os.Getenv("TELEGRAM_BOT_TOKEN"),
+		TermiiAPIKey:        os.Getenv("TERMII_API_KEY"),
+		FCMServerKey:        os.Getenv("FCM_SERVER_KEY"),
+		GoogleClientID:      os.Getenv("GOOGLE_CLIENT_ID"),
+		GoogleClientSecret:  os.Getenv("GOOGLE_CLIENT_SECRET"),
+		GitHubClientID:      os.Getenv("GITHUB_CLIENT_ID"),
+		GitHubClientSecret:  os.Getenv("GITHUB_CLIENT_SECRET"),
+		FrontendUrl:         os.Getenv("FRONTEND_URL"),
+		JwtSecret:           os.Getenv("JWT_SECRET"),
 	}
 }

@@ -12,7 +12,9 @@ import (
 	"github.com/Habeebamoo/tunnl-backend/internal/configs"
 	"github.com/Habeebamoo/tunnl-backend/internal/database"
 	"github.com/Habeebamoo/tunnl-backend/internal/handlers"
+	"github.com/Habeebamoo/tunnl-backend/internal/middlewares"
 	"github.com/Habeebamoo/tunnl-backend/internal/queue"
+	"github.com/Habeebamoo/tunnl-backend/internal/repositories"
 	"github.com/Habeebamoo/tunnl-backend/internal/services"
 
 	"github.com/gin-gonic/gin"
@@ -56,15 +58,28 @@ func New() *App {
 	
 	router := gin.Default()
 
+	//middlewares
+	router.Use(middlewares.CORSMiddleware(cfg.FrontendUrl))
+
+	//repositories init
+	userRepo := repositories.NewUserRepository(db)
+
 	// Services init
+	authService := services.NewAuthService(userRepo, cfg.JwtSecret)
 	producer := queue.NewProducer(redisClient)
 	notificationService := services.NewNotificationService(producer)
 
 	// Handlers init
+	authHandler := handlers.NewAuthHandler(authService, cfg)
 	notificationHandler := handlers.NewNotificationHandler(notificationService)
 
 	// Routes
-	RegisterRoutes(router, notificationHandler)
+	RegisterRoutes(
+		router, 
+		authHandler, 
+		notificationHandler, 
+		cfg.JwtSecret,
+	)
 
 	server := &http.Server{
 		Addr:         ":" + cfg.Port,

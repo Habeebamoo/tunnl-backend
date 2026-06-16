@@ -7,19 +7,18 @@ import (
 	"gorm.io/gorm"
 )
 
-
 type User struct {
-    ID              uuid.UUID  `gorm:"type:uuid;primaryKey"`
-    Name            string    
-    Email           string     `gorm:"uniqueIndex;not null"`
-    Avatar          string    
-    Provider        string     // "google" or "github"
-    ProviderID      string     // their ID on that platform
-    TelegramChatID  string
-    FCMToken        string
-    Phone           string
-    CreatedAt       time.Time
-    UpdatedAt    	  time.Time
+	ID              uuid.UUID  `gorm:"type:uuid;primaryKey" json:"id"`
+	Name            string     `gorm:"not null" json:"name"`
+	Email           string     `gorm:"uniqueIndex;not null" json:"email"`
+	Avatar          string     `gorm:"default:null" json:"avatar,omitempty"`
+	Provider        string     `gorm:"not null" json:"provider"`
+	ProviderID      string     `gorm:"not null" json:"provider_id"`
+	TelegramChatID  string     `gorm:"default:null" json:"telegram_chat_id,omitempty"`
+	FCMToken        string     `gorm:"default:null" json:"fcm_token,omitempty"`
+	Phone           string     `gorm:"default:null" json:"phone,omitempty"`
+	CreatedAt       time.Time  `json:"created_at"`
+	UpdatedAt       time.Time  `json:"updated_at"`
 }
 
 func (u *User) BeforeCreate(tx *gorm.DB) error {
